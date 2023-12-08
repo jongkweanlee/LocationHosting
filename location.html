@@ -20,13 +20,13 @@
 <body>
   <div id="map"></div>
   <button id="btn4">내 위치 가져오기</button>
-  <button id="btn5">CGV 검색</button>
+  <button id="btn5">영화관 검색</button>
   <script type="text/javascript">
     var btn4 = document.getElementById("btn4");
     var btn5 = document.getElementById("btn5");
 
     btn4.addEventListener("click", getUserLocation);
-    btn5.addEventListener("click", searchCGV);
+    btn5.addEventListener("click", searchNearbyTheaters);
 
     var map;
     var userLat;
@@ -90,30 +90,30 @@
       });
     }
 
-    function searchCGV() {
+    function searchNearbyTheaters() {
       var service = new google.maps.places.PlacesService(map);
 
-      // CGV 검색 쿼리
+      // 영화관 검색 쿼리
       var request = {
         location: new google.maps.LatLng(userLat, userLng),
         radius: 10000,  // 10km
-        query: 'CGV'
+        query: '영화관'
       };
 
-      // Places API를 사용하여 CGV 검색
+      // Places API를 사용하여 영화관 검색
       service.textSearch(request, function(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-          // 검색 결과 중 CGV 위치에 마커 추가
+          // 검색 결과 중 영화관 위치에 마커 추가
           for (var i = 0; i < results.length; i++) {
             var place = results[i];
             var marker = new google.maps.Marker({
               map: map,
               position: place.geometry.location,
-              label: "CGV"
+              label: "영화관"
             });
           }
         } else {
-          alert("CGV를 찾을 수 없습니다.");
+          alert("주변에 영화관을 찾을 수 없습니다.");
         }
       });
     }
