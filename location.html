@@ -19,15 +19,12 @@
 </head>
 <body>
   <div id="map"></div>
-  <button id="btn3">거리뷰</button>
   <button id="btn4">내 위치 가져오기</button>
   <button id="btn5">CGV 검색</button>
   <script type="text/javascript">
-    var btn3 = document.getElementById("btn3");
     var btn4 = document.getElementById("btn4");
     var btn5 = document.getElementById("btn5");
 
-    btn3.addEventListener("click", showDistance);
     btn4.addEventListener("click", getUserLocation);
     btn5.addEventListener("click", searchCGV);
 
@@ -51,15 +48,6 @@
     }
 
     initMap();
-
-    function showDistance() {
-      var point1 = new google.maps.LatLng(37.500624, 127.036268); // 현재 위치
-      var point2 = new google.maps.LatLng(35.661625, 125.239803); // 변경된 위치 1
-
-      var distance = google.maps.geometry.spherical.computeDistanceBetween(point1, point2);
-
-      alert("두 지점 간의 거리: " + distance.toFixed(2) + " 미터");
-    }
 
     function getUserLocation() {
       if (navigator.geolocation) {
