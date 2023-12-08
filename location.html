@@ -1,40 +1,61 @@
 <html>
+<div id="map-canvas"></div>
 <head>
 <title>:: GEOLOCATION + Daum Map API ::</title>
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5c4dc8090da25ddb6a800dbf89ef756a"></script>
 <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function() {
-        function getLocation(position) {
+    window.onload = getLocation; 
+function getLocation(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(locationSuccess, locationError, geo_options);
+    }else{
+        console.log("지오 로케이션 없음")
+    }
+};
+// getLocation
+var latitude, longitude;
+function locationSuccess(p){
+    latitude = p.coords.latitude,
+    longitude = p.coords.longitude;
+    initialize();
+}
+// locationSuccess
+function locationError(error){
+    var errorTypes = {
+        0 : "무슨 에러냥~",
+        1 : "허용 안눌렀음",
+        2 : "위치가 안잡힘",
+        3 : "응답시간 지남"
+    };
+    var errorMsg = errorTypes[error.code];
+}
+// locationError
 
-            var latitud = position.coords.latitude;
-            var longitude = position.coords.longitude;
-        
-            var mapContainer = document.getElementById("map")    // 지도를 표시할 DIV
-            var mapOption = {
-                  center : new daum.maps.LatLng(latitud, longitude)    // 지도의 중심좌표
-                , level : 3    // 지도의 확대레벨
-            };
-            
-            // 지도를 생성
-            var map = new daum.maps.Map(mapContainer, mapOption);
-
-            // 마커가 표시될 위치
-            var markerPosition = new daum.maps.LatLng(latitud, longitude);
-
-            // 마커를 생성
-            var marker = new daum.maps.Marker({ position:markerPosition });
-
-            marker.setMap(map);
-        }
-
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(getLocation, function(error) {
-                consol.log(error.message);    
-            });
-        } else {
-            consol.log("Geolocation을 지원하지 않는 브라우저 입니다.");
-        }
+var geo_options = {
+  enableHighAccuracy: true,
+  maximumAge        : 30000,
+  timeout           : 27000
+};
+// geo_options
+var map;
+function initialize() {
+    var myLatLng = new google.maps.LatLng(latitude, longitude);
+    var mapOptions = {
+        zoom: 16,
+        center: myLatLng
+    };
+    var image = './images/Luffys-flag-icon.png';
+    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    var beachMarker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        icon: image
     });
+    //html 문서안에 map-canvas 엘리먼트에 맵을 그리라고 하는 것임
+}
+
+//google.maps.event.addDomListener(window, 'load', initialize);
+    
 </script>
 </head>
 <body>
