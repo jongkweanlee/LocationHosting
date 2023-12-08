@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <title>맵 API</title>
   <style type="text/css">
-    *{
-        margin: 5px;
-        padding: 5px;
+    * {
+      margin: 5px;
+      padding: 5px;
     }
-    #map{
-        border: 2px solid blue;
-        width: 500px;
-        height: 300px;
+    #map {
+      border: 2px solid blue;
+      width: 500px;
+      height: 300px;
     }
   </style>
   <!-- Google Maps API 스크립트 경로를 https로 변경 -->
@@ -21,46 +21,95 @@
   <div id="map"></div>
   <button id="btn1">지도 변경1</button>
   <button id="btn2">지도 변경2</button>
-  <!-- 버튼3에 대한 이벤트는 주석 처리되어 있습니다. -->
-  <!--<button id="btn3">거리뷰</button>-->
+  <button id="btn3">거리뷰</button>
+  <button id="btn4">내 위치 가져오기</button>
   <script type="text/javascript">
     var btn1 = document.getElementById("btn1");
     var btn2 = document.getElementById("btn2");
-    //var btn3 = document.getElementById("btn3");
+    var btn3 = document.getElementById("btn3");
+    var btn4 = document.getElementById("btn4");
 
     btn1.addEventListener("click", changeMap1);
     btn2.addEventListener("click", changeMap2);
-    //btn3.addEventListener("click", changeMap3);
+    btn3.addEventListener("click", showDistance);
+    btn4.addEventListener("click", getUserLocation);
 
     var map;
+    var userLat;
+    var userLng;
 
-    function initMap(){
-        var ll = {lat: 37.500624, lng: 127.036268};
-        map = new google.maps.Map(
-            document.getElementById("map"),
-            {zoom: 17, center: ll}
-        );
-        new google.maps.Marker(
-            {position: ll,
-                map: map,
-                label: "현재 위치"}
-        );
+    function initMap() {
+      var ll = { lat: 37.500624, lng: 127.036268 };
+      map = new google.maps.Map(
+        document.getElementById("map"),
+        { zoom: 17, center: ll }
+      );
+      new google.maps.Marker(
+        {
+          position: ll,
+          map: map,
+          label: "현재 위치"
+        }
+      );
     }
 
     initMap();
 
-    function changeMap1(){
-        var ll = {lat:35.661625, lng: 125.239803};
-        map.panTo(ll);
-        map.setZoom(16);
-    } 
+    function changeMap1() {
+      var ll = { lat: 35.661625, lng: 125.239803 };
+      map.panTo(ll);
+      map.setZoom(16);
+    }
 
-    function changeMap2(){
-        var ll = {lat:-40.339098, lng: 175.609729};
-        map = new google.maps.Map(
-            document.getElementById("map"),
-            {zoom:17, center: ll}
+    function changeMap2() {
+      var ll = { lat: -40.339098, lng: 175.609729 };
+      map = new google.maps.Map(
+        document.getElementById("map"),
+        { zoom: 17, center: ll }
+      );
+    }
+
+    function showDistance() {
+      var point1 = new google.maps.LatLng(37.500624, 127.036268); // 현재 위치
+      var point2 = new google.maps.LatLng(35.661625, 125.239803); // 변경된 위치 1
+
+      var distance = google.maps.geometry.spherical.computeDistanceBetween(point1, point2);
+
+      alert("두 지점 간의 거리: " + distance.toFixed(2) + " 미터");
+    }
+
+    function getUserLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            userLat = position.coords.latitude;
+            userLng = position.coords.longitude;
+            updateMapToUserLocation();
+          },
+          function(error) {
+            console.error("Error getting user location:", error.message);
+          }
         );
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function updateMapToUserLocation() {
+      var ll = { lat: userLat, lng: userLng };
+      map.panTo(ll);
+      map.setZoom(17);
+
+      // 기존 마커 제거
+      map.markers = map.markers || [];
+      map.markers.forEach(marker => marker.setMap(null));
+
+      // 새로운 마커 추가
+      new google.maps.Marker({
+        position: ll,
+        map: map,
+        label: "현재 위치"
+      });
     }
   </script>
 </body>
