@@ -23,16 +23,19 @@
   <button id="btn2">지도 변경2</button>
   <button id="btn3">거리뷰</button>
   <button id="btn4">내 위치 가져오기</button>
+  <button id="btn5">CGV 표시</button>
   <script type="text/javascript">
     var btn1 = document.getElementById("btn1");
     var btn2 = document.getElementById("btn2");
     var btn3 = document.getElementById("btn3");
     var btn4 = document.getElementById("btn4");
+    var btn5 = document.getElementById("btn5");
 
     btn1.addEventListener("click", changeMap1);
     btn2.addEventListener("click", changeMap2);
     btn3.addEventListener("click", showDistance);
     btn4.addEventListener("click", getUserLocation);
+    btn5.addEventListener("click", showCGVLocations);
 
     var map;
     var userLat;
@@ -110,6 +113,32 @@
         map: map,
         label: "현재 위치"
       });
+    }
+
+    function showCGVLocations() {
+      // CGV 강남점의 위치 정보
+      var cgvLat = 37.498580;
+      var cgvLng = 127.028687;
+
+      var cgvLocation = new google.maps.LatLng(cgvLat, cgvLng);
+
+      // 거리 계산을 위한 사용자의 현재 위치
+      var userLocation = new google.maps.LatLng(userLat, userLng);
+
+      // 사용자와 CGV 강남점 간의 거리 계산
+      var distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, cgvLocation);
+
+      // 10km 이내에 있는 경우에만 마커 추가
+      if (distance <= 10000) { // 10km = 10000 미터
+        // CGV 마커 추가
+        new google.maps.Marker({
+          position: cgvLocation,
+          map: map,
+          label: "CGV"
+        });
+      } else {
+        alert("10km 이내에 CGV 영화관이 없습니다.");
+      }
     }
   </script>
 </body>
