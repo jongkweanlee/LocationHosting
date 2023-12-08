@@ -83,6 +83,12 @@
 
     function getUserLocation() {
       if (navigator.geolocation) {
+        var options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        };
+
         navigator.geolocation.getCurrentPosition(
           function(position) {
             userLat = position.coords.latitude;
@@ -91,7 +97,8 @@
           },
           function(error) {
             console.error("Error getting user location:", error.message);
-          }
+          },
+          options
         );
       } else {
         alert("Geolocation is not supported by this browser.");
