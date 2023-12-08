@@ -19,20 +19,14 @@
 </head>
 <body>
   <div id="map"></div>
-  <button id="btn1">지도 변경1</button>
-  <button id="btn2">지도 변경2</button>
   <button id="btn3">거리뷰</button>
   <button id="btn4">내 위치 가져오기</button>
   <button id="btn5">CGV 검색</button>
   <script type="text/javascript">
-    var btn1 = document.getElementById("btn1");
-    var btn2 = document.getElementById("btn2");
     var btn3 = document.getElementById("btn3");
     var btn4 = document.getElementById("btn4");
     var btn5 = document.getElementById("btn5");
 
-    btn1.addEventListener("click", changeMap1);
-    btn2.addEventListener("click", changeMap2);
     btn3.addEventListener("click", showDistance);
     btn4.addEventListener("click", getUserLocation);
     btn5.addEventListener("click", searchCGV);
@@ -57,20 +51,6 @@
     }
 
     initMap();
-
-    function changeMap1() {
-      var ll = { lat: 35.661625, lng: 125.239803 };
-      map.panTo(ll);
-      map.setZoom(16);
-    }
-
-    function changeMap2() {
-      var ll = { lat: -40.339098, lng: 175.609729 };
-      map = new google.maps.Map(
-        document.getElementById("map"),
-        { zoom: 17, center: ll }
-      );
-    }
 
     function showDistance() {
       var point1 = new google.maps.LatLng(37.500624, 127.036268); // 현재 위치
